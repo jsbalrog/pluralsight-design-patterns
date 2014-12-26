@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title></title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  </head>
+  <body>
+    <ul>
+    
+    </ul>
+    <script>
+    $(document).ready(function() {
+      var $ul = $('ul'), index = 0;
+
+      // This is the setInterval way. Blindly keeps sending off requests at the specified interval. Unpredictable across browsers.
+      /*
+      setInterval(function() {
+        var started = new Date(), i = index;
+
+        index++;
+
+        $.get('/data', function(data) {
+          var end = new Date();
+          $ul.append('<li>Request ' + i + ' started at ' + started.getSeconds() + ' and ended at ' + end.getSeconds() + ' -- Data: ' + JSON.stringify(data));
+        })
+      }, 3000);
+       */
+
+      // This is the setTimeout way. Notice the named anonymous function. This is so we can call it. This is more predictable -- we don't start the
+      // execution of the next one until we are ready to.
+      setTimeout(function getDate() {
+        var started = new Date(), i = index;
+
+        index++;
+
+        $.get('/data', function(data) {
+          var end = new Date();
+          $ul.append('<li>Request ' + i + ' started at ' + started.getSeconds() + ' and ended at ' + end.getSeconds() + ' -- Data: ' + JSON.stringify(data));
+
+          setTimeout(getDate, 3000);
+        })
+      }, 3000);
+        
+    });
+    </script>
+  </body>
+</html>
+

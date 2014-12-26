@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title></title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  </head>
+  <body>
+    <ul>
+    
+    </ul>
+    <script>
+    $(document).ready(function() {
+
+      var buffer = function(items, iterFn, callback) {
+        setTimeout(function foo() {
+          var result, i = 0;
+
+          for(var start = +new Date; i < items.length && result !== false && ((+new Date) - start < 50); i++) {
+            result = iterFn.call(items[i], items[i], i);
+          }
+
+          if(i < items.length && result !== false) {
+            setTimeout(foo, 20);
+          } else {
+            callback(items);
+          }
+        }, 20);
+      }
+
+      $.get('/data', function(result) {
+        var html = '';
+
+        buffer(result, function(item) {
+          html += '<li>' + item + '</li>';
+        }, function() {
+          $('ul').append(html);
+        });
+      });
+    });
+    </script>
+  </body>
+</html>
